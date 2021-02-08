@@ -108,6 +108,11 @@ versions of the simulation code, respectively. Some modification of the
 Makefile is necessary depending on where VxWorks is installed on the target
 machine.
 
+## Docker
+
+See the contents of the `docker` directory for running the simulator within a
+Docker container.
+
 # Copyright
 
 Copyright 2021, by the California Institute of Technology. ALL RIGHTS RESERVED.
