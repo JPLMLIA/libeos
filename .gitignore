@@ -13,3 +13,4 @@ bin/*
 test/coverage
 *.sw*
 *.DS_Store
+*.pyc
