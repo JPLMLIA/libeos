@@ -1,0 +1,15 @@
+*~
+*.dSYM
+*.o
+*.oa
+*.oc
+*.ov
+*.a
+coverity
+bin/*
+*.info
+*.gcda
+*.gcno
+test/coverage
+*.sw*
+*.DS_Store
