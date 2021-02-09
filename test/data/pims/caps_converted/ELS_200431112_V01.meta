@@ -1,0 +1,7 @@
+TIMESTAMP_START: 730120.0
+bin_selection: all
+blur_sigma: 0
+data_file: /scratch_lg/image-content/ameyasd/crossings_updated/data/ELS_200431112_V01.DAT
+filter: no_filter
+filter_size: 0
+quantity: anode5
