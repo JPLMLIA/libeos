@@ -23,7 +23,7 @@
 
 /* Defaults for 'init_params'.
  * We don't want contributions from other algorithms! */
-EosStatus default_init_params(EosInitParams* init_params){
+EosStatus default_init_params_pims(EosInitParams* init_params){
     EosPimsParams pims_params = {
         .alg = EOS_PIMS_BASELINE,
         .params = {
@@ -216,7 +216,7 @@ EosStatus run_pims_sim(char* inputfile, char* outputfile, config_ptr config) {
 
     /* Initialize 'eos'. */
     EosInitParams init_params;
-    status |= default_init_params(&init_params);
+    status |= default_init_params_pims(&init_params);
     status |= eos_init(&init_params, NULL, 0, log_function);
     if(status != EOS_SUCCESS){
         return status;
