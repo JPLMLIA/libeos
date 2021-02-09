@@ -36,7 +36,10 @@ EosStatus read_observation(const char* filename, const char* mode,
     fseek(fp, 0L, SEEK_SET);
 
     // Read contents to data_ptr and close file
-    fread(*data_ptr, sizeof(unsigned char), *size, fp);
+    size_t result = fread(*data_ptr, sizeof(unsigned char), *size, fp);
+    if(result != sizeof(unsigned char) * (*size)){
+        return EOS_ERROR;
+    }
     fclose(fp);
 
     return EOS_SUCCESS;

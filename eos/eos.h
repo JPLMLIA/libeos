@@ -38,4 +38,9 @@ EosStatus eos_load_etm(const void* data, const uint64_t size,
 EosStatus eos_load_mise(const void* data, const uint64_t size,
                         EosMiseObservation* obs);
 
+EosStatus eos_load_pims(const void* data, const uint64_t size,
+                        EosPimsObservationsFile* obs_file);
+
+EosStatus eos_pims_observation_attributes(const void* data, const uint64_t size, uint32_t* num_modes, uint32_t* max_bins, uint32_t* num_obs);
+
 #endif

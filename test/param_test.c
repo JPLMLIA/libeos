@@ -158,6 +158,59 @@ void TestMiseParamCheck(CuTest *ct) {
     CuAssertIntEquals(ct, EOS_PARAM_ERROR, status);
 }
 
+void TestPimsParamCheck(CuTest *ct) {
+    EosStatus status;
+    EosPimsParams pims_params;
+
+    pims_params.params.common_params.filter = EOS_PIMS_NO_FILTER;
+    pims_params.params.common_params.max_observations = 10;
+    pims_params.params.common_params.max_bins = 100;
+    pims_params.alg = EOS_PIMS_BASELINE;
+    status = pims_params_check(&pims_params);
+    CuAssertIntEquals(ct, EOS_SUCCESS, status);
+
+    pims_params.params.common_params.max_observations = 0;
+    pims_params.alg = EOS_PIMS_NO_ALGORITHM;
+    status = pims_params_check(&pims_params);
+    CuAssertIntEquals(ct, EOS_PARAM_ERROR, status);
+
+    pims_params.params.common_params.max_observations = 1;
+    status = pims_params_check(&pims_params);
+    CuAssertIntEquals(ct, EOS_PARAM_ERROR, status);
+
+    pims_params.alg = EOS_PIMS_BASELINE;
+    status = pims_params_check(&pims_params);
+    CuAssertIntEquals(ct, EOS_SUCCESS, status);
+
+    pims_params.params.common_params.filter = EOS_PIMS_MIN_FILTER;
+    status = pims_params_check(&pims_params);
+    CuAssertIntEquals(ct, EOS_SUCCESS, status);
+
+    pims_params.params.common_params.filter = EOS_PIMS_MEAN_FILTER;
+    status = pims_params_check(&pims_params);
+    CuAssertIntEquals(ct, EOS_SUCCESS, status);
+
+    pims_params.params.common_params.filter = EOS_PIMS_MAX_FILTER;
+    status = pims_params_check(&pims_params);
+    CuAssertIntEquals(ct, EOS_SUCCESS, status);
+
+    pims_params.params.common_params.max_bins = 0;
+    status = pims_params_check(&pims_params);
+    CuAssertIntEquals(ct, EOS_PARAM_ERROR, status);
+}
+
+void TestCombinedParamCheck(CuTest *ct) {
+    EosStatus status;
+    EosParams params;
+
+    /* Invalid values for PIMS and MISE: should be rejected independently. */
+    params.pims.params.common_params.max_observations = 0;
+    params.mise.alg = EOS_MISE_N_ALGS;
+
+    status = params_check(&params);
+    CuAssertIntEquals(ct, EOS_PARAM_ERROR, status);
+}
+
 CuSuite* CuParamGetSuite(void)
 {
     CuSuite* suite = CuSuiteNew();
@@ -170,6 +223,8 @@ CuSuite* CuParamGetSuite(void)
     SUITE_ADD_TEST(suite, TestParamGteoMacro);
     SUITE_ADD_TEST(suite, TestParamInRangeMacro);
     SUITE_ADD_TEST(suite, TestMiseParamCheck);
+    SUITE_ADD_TEST(suite, TestPimsParamCheck);
+    SUITE_ADD_TEST(suite, TestCombinedParamCheck);
 
     return suite;
 }

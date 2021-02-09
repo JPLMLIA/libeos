@@ -36,8 +36,7 @@ EosStatus run_ethemis_sim(const char* inputfile, const char* outputfile,
     } while(0)
 
     log_function(EOS_LOG_INFO, "Initializing library...");
-    init_params.max_mise_width = 0;
-    init_params.max_mise_height = 0;
+    default_init_params(&init_params);
     status = eos_init(&init_params, NULL, 0, log_function);
     CHECK_STATUS(status);
 
@@ -88,11 +87,11 @@ EosStatus run_ethemis_sim(const char* inputfile, const char* outputfile,
         int j, n_det = result.n_results[band];
         eos_logf(EOS_LOG_INFO, "Band %d (%d detections)", band + 1, n_det);
         for (j = 0; j < n_det; j++) {
-            EosEthemisDetection det = result.band_results[band][j];
+            EosPixelDetection det = result.band_results[band][j];
             eos_logf(EOS_LOG_KEY_VALUE,
                 "{ \"band\": %d, \"rank\": %d, \"row\": %u, "
                 "\"col\": %u, \"dn\": %u }",
-                band + 1, j, det.row, det.col, det.dn
+                band + 1, j, det.row, det.col, (uint32_t) det.score
             );
         }
     }

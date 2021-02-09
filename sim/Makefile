@@ -4,9 +4,10 @@
 CCPPC = ccppc
 CCPPCFLAGS = -mhard-float -mstrict-align -mregnames -O3 \
 	-fstrength-reduce -fno-builtin \
-	-DCPU=PPC32 -DTOOL_FAMILY=gnu -DTOOL=gnu -DEOS_UNSAFE_LOG \
+	-DCPU=PPC32 -DTOOL_FAMILY=gnu -DTOOL=gnu -DEOS_UNSAFE_LOG -DEOS_NO_LIBCONFIG \
+	-std=iso9899:1999 \
 	-I$(WIND_BASE)/vxworks-6.9/target/h
-CCPPCLIBS = -I../eos -L../eos -leos
+CCPPCLIBS = -I../eos -L../eos -leos -lm
 CFLAGS = -g -Wall -Wextra -O3 -std=iso9899:1999 -D_XOPEN_SOURCE=700
 OS := $(shell uname)
 ifeq ($(OS),Darwin)
@@ -18,6 +19,23 @@ else
 	LIBS = -I../eos -L../eos -leos -pg -lconfig -lm
 endif
 
+ifdef CONFIG_MODE
+ifeq ($(CONFIG_MODE),EOS_NO_LIBCONFIG)
+	CFLAGS += -DEOS_NO_LIBCONFIG
+else
+    $(error Unrecognized value $(CONFIG_MODE) for CONFIG_MODE)
+endif
+endif
+
+ifdef PIMS_COUNT_T
+ifeq ($(PIMS_COUNT_T),U16)
+	CCPPCFLAGS += -DEOS_PIMS_U16_DATA
+	CFLAGS += -DEOS_PIMS_U16_DATA
+else
+    $(error Unrecognized value $(PIMS_COUNT_T) for PIMS_COUNT_T)
+endif
+endif
+
 # Location of destination for compiled binaries
 BIN = ../bin
 
@@ -25,7 +43,7 @@ BIN = ../bin
 SIMULATION = $(BIN)/run_sim
 
 # Source code files required for Linux simulation
-SIMULATION_SRC = run_sim.c sim_ethemis.c sim_mise.c \
+SIMULATION_SRC = run_sim.c sim_ethemis.c sim_mise.c sim_pims.c \
 	sim_log.c sim_io.c sim_util.c
 
 # Shared code also used by VxWorks simulation

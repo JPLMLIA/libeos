@@ -8,7 +8,8 @@
 
 void TestDoubleInit(CuTest* ct) {
     EosStatus status;
-    EosInitParams init_params = default_init_params();
+    EosInitParams init_params;
+    default_init_params_test(&init_params);
 
     /* Call eos_init() twice - should be okay and re-init */
     status = eos_init(&init_params, NULL, 0, NULL);
@@ -21,7 +22,8 @@ void TestDoubleInit(CuTest* ct) {
 
 void TestInsufficientMemoryInit(CuTest* ct) {
     EosStatus status;
-    EosInitParams init_params = default_init_params();
+    EosInitParams init_params;
+    default_init_params_test(&init_params);
 
     uint8_t data[8];
 

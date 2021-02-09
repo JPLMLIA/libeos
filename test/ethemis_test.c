@@ -43,7 +43,8 @@ void TestEthemisInterface(CuTest *ct) {
     const int N_EXPECT = 3;
 
     EosStatus status;
-    EosInitParams init_params = default_init_params();
+    EosInitParams init_params;
+    default_init_params_test(&init_params);
 
     status = eos_init(&init_params, NULL, 0, NULL);
     CuAssertIntEquals(ct, EOS_SUCCESS, status);
@@ -107,7 +108,8 @@ void TestEmptyEthemisObservation(CuTest *ct) {
     const int N_EXPECT = 0;
 
     EosStatus status;
-    EosInitParams init_params = default_init_params();
+    EosInitParams init_params;
+    default_init_params_test(&init_params);
 
     status = eos_init(&init_params, NULL, 0, NULL);
     CuAssertIntEquals(ct, EOS_SUCCESS, status);
@@ -162,7 +164,8 @@ void TestNullBandResults(CuTest *ct) {
     const uint16_t THRESH = 8;
 
     EosStatus status;
-    EosInitParams init_params = default_init_params();
+    EosInitParams init_params;
+    default_init_params_test(&init_params);
 
     status = eos_init(&init_params, NULL, 0, NULL);
     CuAssertIntEquals(ct, EOS_SUCCESS, status);
@@ -206,7 +209,8 @@ void TestZeroData(CuTest *ct) {
     const int N_EXPECT = 0;
 
     EosStatus status;
-    EosInitParams init_params = default_init_params();
+    EosInitParams init_params;
+    default_init_params_test(&init_params);
 
     status = eos_init(&init_params, NULL, 0, NULL);
     CuAssertIntEquals(ct, EOS_SUCCESS, status);
@@ -252,7 +256,8 @@ void TestZeroDataZeroThresh(CuTest *ct) {
     const int N_EXPECT = 5;
 
     EosStatus status;
-    EosInitParams init_params = default_init_params();
+    EosInitParams init_params;
+    default_init_params_test(&init_params);
 
     status = eos_init(&init_params, NULL, 0, NULL);
     CuAssertIntEquals(ct, EOS_SUCCESS, status);
@@ -298,7 +303,8 @@ void TestNExpectLimit(CuTest *ct) {
     const int N_EXPECT = 5;
 
     EosStatus status;
-    EosInitParams init_params = default_init_params();
+    EosInitParams init_params;
+    default_init_params_test(&init_params);
 
     status = eos_init(&init_params, NULL, 0, NULL);
     CuAssertIntEquals(ct, EOS_SUCCESS, status);
@@ -344,7 +350,8 @@ void TestZeroRequested(CuTest *ct) {
     const int N_EXPECT = 0;
 
     EosStatus status;
-    EosInitParams init_params = default_init_params();
+    EosInitParams init_params;
+    default_init_params_test(&init_params);
 
     status = eos_init(&init_params, NULL, 0, NULL);
     CuAssertIntEquals(ct, EOS_SUCCESS, status);
@@ -391,7 +398,8 @@ void TestTooManyRequested(CuTest *ct) {
     const int N_EXPECT = NROWS*NCOLS;
 
     EosStatus status;
-    EosInitParams init_params = default_init_params();
+    EosInitParams init_params;
+    default_init_params_test(&init_params);
 
     status = eos_init(&init_params, NULL, 0, NULL);
     CuAssertIntEquals(ct, EOS_SUCCESS, status);

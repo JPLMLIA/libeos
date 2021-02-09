@@ -61,6 +61,13 @@ void TestUMIN(CuTest *ct) {
     CuAssertIntEquals(ct, eos_umin(a, a), 1);
 }
 
+void TestUMAX(CuTest *ct) {
+    unsigned int a = 10, b = 1;
+    CuAssertIntEquals(ct, eos_umin(a, b), 1);
+    CuAssertIntEquals(ct, eos_umin(b, a), 1);
+    CuAssertIntEquals(ct, eos_umin(a, a), 10);
+}
+
 void TestLMAX(CuTest *ct) {
     long int a = 0, b = 1;
     CuAssertIntEquals(ct, eos_lmax(a, b), 1);
@@ -116,6 +123,7 @@ CuSuite* CuUtilGetSuite(void)
     SUITE_ADD_TEST(suite, TestLMAX);
     SUITE_ADD_TEST(suite, TestIMIN);
     SUITE_ADD_TEST(suite, TestUMIN);
+    SUITE_ADD_TEST(suite, TestUMAX);
     SUITE_ADD_TEST(suite, TestIMAX);
     SUITE_ADD_TEST(suite, TestRound);
     SUITE_ADD_TEST(suite, TestFloor);

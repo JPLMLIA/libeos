@@ -203,7 +203,7 @@ EosStatus run_ethemis_sim(char *inputfile, char *outputfile,
     } while(0)
 
     log_function(EOS_LOG_INFO, "Initializing library...");
-    init_params.mise_max_bands = EOS_MISE_N_BANDS;
+    default_init_params(&init_params);
     status = eos_init(&init_params, NULL, 0, log_function);
     CHECK_STATUS(status);
 
@@ -211,7 +211,7 @@ EosStatus run_ethemis_sim(char *inputfile, char *outputfile,
     status = read_observation(inputfile, "rb", &data, &size);
     CHECK_STATUS(status);
 
-    eos_logf(EOS_LOG_INFO, "Loading observation from file contents");
+    eos_logf(EOS_LOG_INFO, "Allocating memory for observation");
     status = init_ethemis_obs(&obs, size / sizeof(uint16_t));
     CHECK_STATUS(status);
 

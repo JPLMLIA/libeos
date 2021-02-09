@@ -31,6 +31,19 @@ void byte_swap_U32(U32 *bytes) {
     bytes[0] = value;
 }
 
+void byte_swap_F32(F32 *bytes){
+    F32 value;
+    char *bytes_ptr = (char*) bytes;
+    char *value_ptr = (char*) &value;
+
+    value_ptr[0] = bytes_ptr[3];
+    value_ptr[1] = bytes_ptr[2];
+    value_ptr[2] = bytes_ptr[1];
+    value_ptr[3] = bytes_ptr[0];
+
+    *bytes = value;
+}
+
 void correct_endianness_U16(EosEndianness current, EosEndianness desired,
                             U16 *bytes) {
     if (current != desired) {
@@ -42,6 +55,13 @@ void correct_endianness_U32(EosEndianness current, EosEndianness desired,
                             U32 *bytes) {
     if (current != desired) {
         byte_swap_U32(bytes);
+    }
+}
+
+void correct_endianness_F32(EosEndianness current, EosEndianness desired,
+                            F32 *bytes) {
+    if (current != desired) {
+        byte_swap_F32(bytes);
     }
 }
 
@@ -102,6 +122,14 @@ inline U32 eos_umin(U32 a, U32 b) {
     }
 }
 
+inline U32 eos_umax(U32 a, U32 b) {
+    if (a > b) {
+        return a;
+    } else {
+        return b;
+    }
+}
+
 inline I64 eos_lmax(I64 a, I64 b) {
     if (a > b) {
         return a;
@@ -147,4 +175,16 @@ F64 eos_dsum(U32 n, F64 *x) {
         sum += x[i];
     }
     return sum;
+}
+
+U32 eos_uabs_diff(U32 x, U32 y){
+    if(x < y){
+        return y - x;
+    } else {
+        return x - y;
+    }
+}
+
+F64 eos_hypot(F64 x, F64 y){
+    return sqrt((x * x) + (y * y));
 }

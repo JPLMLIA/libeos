@@ -13,10 +13,13 @@
 EosEndianness system_endianness(void);
 void byte_swap_U16(U16 *bytes);
 void byte_swap_U32(U32 *bytes);
+void byte_swap_F32(F32 *bytes);
 void correct_endianness_U16(EosEndianness current, EosEndianness desired,
                             U16 *bytes);
 void correct_endianness_U32(EosEndianness current, EosEndianness desired,
                             U32 *bytes);
+void correct_endianness_F32(EosEndianness current, EosEndianness desired,
+                            F32 *bytes);
 
 const void* const_byte_offset(const void* ptr, U64 nbytes);
 void* byte_offset(void* ptr, U64 nbytes);
@@ -32,5 +35,8 @@ F64 eos_norm_sqeuclidean(U32 n, F64 *x);
 F64 eos_norm_infinity(U32 n, F64 *x);
 F64 eos_dsum(U32 n, F64 *x);
 U32 eos_umin(U32 a, U32 b);
+U32 eos_umax(U32 a, U32 b);
+U32 eos_uabs_diff(U32 a, U32 b);
+F64 eos_hypot(F64 n, F64 x);
 
 #endif

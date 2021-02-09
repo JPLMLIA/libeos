@@ -217,7 +217,8 @@ void TestRxAnomalyDetection(CuTest *ct) {
     uint16_t data1[6] = {1, 1, 1, 2, 2, 2};
     uint32_t n_results = 4;
     EosPixelDetection results[4];
-    EosInitParams init_params = default_init_params();
+    EosInitParams init_params;
+    default_init_params_test(&init_params);
 
     // Initialize for memory allocation
     status = eos_init(&init_params, NULL, 0, NULL);
@@ -280,7 +281,8 @@ void TestMiseInterface(CuTest *ct) {
     EosStatus status;
 
     // Set up library/algorithm params
-    EosInitParams init_params = default_init_params();
+    EosInitParams init_params;
+    default_init_params_test(&init_params);
     EosMiseParams params;
     params.alg = EOS_MISE_RX;
 
@@ -295,7 +297,7 @@ void TestMiseInterface(CuTest *ct) {
     uint32_t size;
     EosMiseObservation obs;
     InitMiseObs(&obs, 10, 10, 5);
-    read_resource(ct, "test_mise.mis", &data, &size);
+    read_resource(ct, "mise/test_mise.mis", &data, &size);
 
     // First test without initialization
     status = eos_mise_detect_anomaly(&params, &obs, &result);

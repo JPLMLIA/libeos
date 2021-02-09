@@ -3,12 +3,16 @@
 #include <stdint.h>
 #include <string.h>
 #include <argp.h>
+
+#ifndef EOS_NO_LIBCONFIG
 #include <libconfig.h>
+#endif
 
 #include <eos.h>
 
 #include "sim_ethemis.h"
 #include "sim_mise.h"
+#include "sim_pims.h"
 
 /* Program documentation */
 static char doc[] = "EOS Simulation Program";
@@ -79,34 +83,41 @@ int main(int argc, char **argv) {
     /* Default argument values */
     error_t status;
     EosStatus eos_status = EOS_SUCCESS;
-    Arguments args;
-    args.outputfile = "-";
-    args.configfile = NULL;
+    Arguments args = {
+        .outputfile = "-",
+        .configfile = NULL,
+    };
 
-    // Parse arguments
+    /* Parse arguments. */
     status = argp_parse(&argp, argc, argv, ARGP_NO_HELP, 0, &args);
     if (status != 0) {
-        // Terminate with error code
+        /* Terminate with error code. */
         return status;
     }
 
-    // Parse config
-    config_t cfg;
-    config_t *cfg_ptr = NULL;
-    config_init(&cfg);
-    if (args.configfile != NULL) {
-        if(!config_read_file(&cfg, args.configfile)) {
-            fprintf(
-                stderr, "%s (line %d): %s\n", config_error_file(&cfg),
-                config_error_line(&cfg), config_error_text(&cfg)
-            );
-            config_destroy(&cfg);
-            return EXIT_FAILURE;
+    /* Parse config, either with custom logic or libconfig. */
+    config_ptr config;
+    #ifdef EOS_NO_LIBCONFIG
+        config = args.configfile;
+    #else
+        config_t cfg;
+        config_t *cfg_ptr = NULL;
+        config_init(&cfg);
+        if (args.configfile != NULL) {
+            if(!config_read_file(&cfg, args.configfile)) {
+                fprintf(
+                    stderr, "%s (line %d): %s\n", config_error_file(&cfg),
+                    config_error_line(&cfg), config_error_text(&cfg)
+                );
+                config_destroy(&cfg);
+                return EXIT_FAILURE;
+            }
+            cfg_ptr = &cfg;
         }
-        cfg_ptr = &cfg;
-    }
+        config = cfg_ptr;
+    #endif
 
-    // Check extension to see which kind of analysis to run
+    /* Check extension to see which kind of analysis to run. */
     char* inputfile = args.args[0];
     int len = strlen(inputfile);
     if (len > 4) {
@@ -115,14 +126,18 @@ int main(int argc, char **argv) {
         if (strncmp(ext, ".etm", 4) == 0) {
             eos_status = run_ethemis_sim(inputfile, args.outputfile, cfg_ptr);
         } else if (strncmp(ext, ".mis", 4) == 0) {
-            //eos_status = run_mise_sim(args.args[0], args.outputfile, cfg_ptr);
-            eos_status = run_mise_sim(inputfile, args.outputfile);
+            eos_status = run_mise_sim(inputfile, args.outputfile, cfg_ptr);
+        } else if (strncmp(ext, ".pim", 4) == 0) {
+            eos_status = run_pims_sim(inputfile, args.outputfile, config);
         } else {
-            fprintf(stderr, "Unknown file type %s", ext);
+            fprintf(stderr, "Unknown file type %s\n", ext);
             return EXIT_FAILURE;
         }
     }
 
-    config_destroy(&cfg);
+    #ifndef EOS_NO_LIBCONFIG
+        config_destroy(&cfg);
+    #endif
+
     return eos_status;
 }

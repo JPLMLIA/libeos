@@ -11,6 +11,7 @@
 #include "eos_params.h"
 #include "eos_ethemis.h"  /* Thermal anomaly detection for E-THEMIS */
 #include "eos_mise.h"     /* Spectral anomaly detection for MISE */
+#include "eos_pims.h"     /* Time-series anomaly detection for PIMS */
 #include "eos_data.h"
 
 static I32 EOS_IS_INITIALIZED = EOS_FALSE;
@@ -18,6 +19,7 @@ static EosInitParams init_params;
 
 static U64 _eos_ethemis_detect_anomaly_mreq(const EosInitParams* params);
 static U64 _eos_mise_detect_anomaly_mreq(const EosInitParams* params);
+static U64 _eos_pims_detect_anomaly_mreq(const EosInitParams* params);
 
 /*
  * This function should compute the maximum memory required by any public
@@ -30,6 +32,7 @@ uint64_t eos_memory_requirement(const EosInitParams* params) {
 
     call_size = eos_lmax(call_size, _eos_ethemis_detect_anomaly_mreq(params));
     call_size = eos_lmax(call_size, _eos_mise_detect_anomaly_mreq(params));
+    call_size = eos_lmax(call_size, _eos_pims_detect_anomaly_mreq(params));
 
     // Potential extra memory required by alignment bytes for each allocation
     padding = EOS_MEMORY_STACK_MAX_DEPTH * ALIGN_SIZE;
@@ -173,6 +176,16 @@ static U64 _eos_mise_detect_anomaly_mreq(const EosInitParams* params) {
     return base_size + call_size;
 }
 
+static U64 _eos_pims_detect_anomaly_mreq(const EosInitParams* params) {
+    U64 base_size = 0;
+    U64 call_size = 0;
+    if (eos_assert(params != NULL)) { return 0; }
+
+    call_size = eos_umax(call_size, eos_pims_alg_init_mreq(params -> pims_params.alg, &(params -> pims_params.params)));
+    call_size = eos_umax(call_size, eos_pims_alg_on_recv_mreq(params -> pims_params.alg, &(params -> pims_params.params)));
+    return base_size + call_size;
+}
+
 EosStatus eos_mise_detect_anomaly(const EosMiseParams* params,
                                   const EosMiseObservation* observation,
                                   EosMiseDetectionResult* result) {
@@ -226,6 +239,31 @@ EosStatus eos_load_mise(const void* data, const U64 size,
     if (status != EOS_SUCCESS) { return status; }
 
     status = load_mise(data, size, obs);
+    if (status != EOS_SUCCESS) { return status; }
+
+    _eos_after();
+    return status;
+}
+
+EosStatus eos_load_pims(const void* data, const U64 size,
+                       EosPimsObservationsFile* obs_file) {
+    EosStatus status;
+    status = _eos_before();
+    if (status != EOS_SUCCESS) { return status; }
+
+    status = load_pims(data, size, obs_file);
+    if (status != EOS_SUCCESS) { return status; }
+
+    _eos_after();
+    return status;
+}
+
+EosStatus eos_pims_observation_attributes(const void* data, const uint64_t size, uint32_t* num_modes, uint32_t* max_bins, uint32_t* num_obs){
+    EosStatus status;
+    status = _eos_before();
+    if (status != EOS_SUCCESS) { return status; }
+
+    status = read_pims_observation_attributes(data, size, num_modes, max_bins, num_obs);
     if (status != EOS_SUCCESS) { return status; }
 
     _eos_after();

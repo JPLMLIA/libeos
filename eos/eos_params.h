@@ -14,9 +14,17 @@
 // Default MISE Params
 #define EOS_DEFAULT_MISE_ALG EOS_MISE_RX
 
+// Default PIMS Params
+#define EOS_DEFAULT_PIMS_THRESHOLD 0
+#define EOS_DEFAULT_PIMS_MAX_BINS 100
+#define EOS_DEFAULT_PIMS_FILTER EOS_PIMS_NO_FILTER
+#define EOS_DEFAULT_PIMS_MAX_OBS 1
+#define EOS_DEFAULT_PIMS_ALG EOS_PIMS_BASELINE
+
 EosStatus params_init_default(EosParams* params);
 EosStatus ethemis_params_check(const EosEthemisParams* params);
 EosStatus mise_params_check(const EosMiseParams* params);
+EosStatus pims_params_check(const EosPimsParams* params);
 EosStatus params_check(const EosParams* params);
 EosStatus _param_check(U32 check, CHAR* check_str);
 

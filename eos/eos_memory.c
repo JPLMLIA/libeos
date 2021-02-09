@@ -30,7 +30,8 @@ EosStatus memory_init(void *initial_memory_ptr, U64 initial_memory_size, U64 req
         self_allocated = EOS_FALSE;
     } else {
         eos_logf(EOS_LOG_INFO,
-            "No memory provided, so allocate our own memory (%d bytes).", required_nbytes);
+            "No memory provided, so allocate our own memory (%lu bytes).",
+            (U32) required_nbytes);
         eos_memory_ptr = malloc(required_nbytes);
         if (eos_memory_ptr == NULL) {
             eos_log(EOS_LOG_ERROR, "No memory provided and malloc failed.");
@@ -82,8 +83,8 @@ EosMemoryBuffer *lifo_allocate_buffer(U64 nbytes) {
     required_nbytes = preallocated + aligned_nbytes;
     if (required_nbytes > eos_memory_nbytes) {
         eos_logf(EOS_LOG_ERROR,
-                 "Required %d bytes for allocation, %d available.",
-                 required_nbytes, eos_memory_nbytes);
+                 "Required %lu bytes for allocation, %lu available.",
+                 (U32) required_nbytes, (U32) eos_memory_nbytes);
         return NULL;
     }
 

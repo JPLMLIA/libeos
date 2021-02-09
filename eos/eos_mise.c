@@ -194,8 +194,8 @@ EosStatus _eigen_pivot(F64 p, F64 y, F64* c, F64* s, F64* t) {
     if (eos_assert(s != NULL)) { return EOS_ASSERT_ERROR; }
     if (eos_assert(t != NULL)) { return EOS_ASSERT_ERROR; }
     if (eos_assert(p != 0)) { return EOS_ASSERT_ERROR; }
-    *t = fabs(y) + hypot(p, y);
-    *s = hypot(p, *t);
+    *t = fabs(y) + eos_hypot(p, y);
+    *s = eos_hypot(p, *t);
     *c = *t / *s;
     *s = p / *s;
     *t = (p / *t) *p;

@@ -13,6 +13,7 @@ CuSuite *CuEthemisGetSuite();
 CuSuite *CuDataGetSuite();
 CuSuite *CuEosGetSuite();
 CuSuite *CuMiseGetSuite();
+CuSuite *CuPimsGetSuite();
 CuSuite *CuHeapGetSuite();
 
 unsigned int run_all(void)
@@ -30,6 +31,7 @@ unsigned int run_all(void)
     suites[n_suites++] = CuDataGetSuite();
     suites[n_suites++] = CuEosGetSuite();
     suites[n_suites++] = CuMiseGetSuite();
+    suites[n_suites++] = CuPimsGetSuite();
     suites[n_suites++] = CuHeapGetSuite();
 
     int i;
