@@ -10,7 +10,7 @@ git clone https://github.com/JPLMLIA/libeos.git
 ```bash
 cd libeos/docker
 ```
-4. Build the container here with:
+4. Build the container from the image here with:
 ```bash
 sudo docker build -t libeos-container .
 ```
@@ -18,7 +18,22 @@ sudo docker build -t libeos-container .
 ```bash
 sudo docker run -i -t libeos-container
 ```
-The container will start, exposing a Bash shell within Ubuntu 18.04
-with libeos and all dependencies (libconfig, BITFLIPS) pre-installed.
-
-
+6. The container will start, exposing a Bash shell within Ubuntu 18.04
+  with libeos and all dependencies (libconfig, BITFLIPS) pre-installed.
+  Ensure that `libeos` is installed properly by running the tests,
+  inside the container's shell:
+```bash
+> cd libeos
+> make run_tests 
+```
+  You should see all tests pass:
+```
+...
+TestHeapAdd2Then1.............................PASS
+TestHeapAdd1Then1.............................PASS
+TestHeapAddExtraHigh..........................PASS
+TestHeapAddExtraLow...........................PASS
+TestHeapAdd12345..............................PASS
+TestHeapSortEmpty.............................PASS
+OK (125 tests)
+```
